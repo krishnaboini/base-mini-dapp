@@ -35,6 +35,7 @@
   <button onclick="disconnectWallet()">Disconnect</button>
 
   <div class="card">
+    <p id="status"></p>
     <p id="address"></p>
     <p id="balance"></p>
   </div>
@@ -48,6 +49,8 @@
         return;
       }
 
+      document.getElementById("status").innerText = "⏳ Connecting...";
+
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       await provider.send("eth_requestAccounts", []);
 
@@ -59,9 +62,12 @@
       const balance = await provider.getBalance(address);
       document.getElementById("balance").innerText =
         "💰 " + ethers.utils.formatEther(balance) + " ETH";
+
+      document.getElementById("status").innerText = "✅ Connected";
     }
 
     function disconnectWallet() {
+      document.getElementById("status").innerText = "🔌 Disconnected";
       document.getElementById("address").innerText = "";
       document.getElementById("balance").innerText = "";
     }
