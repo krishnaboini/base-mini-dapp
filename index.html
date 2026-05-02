@@ -2,21 +2,47 @@
 <html>
 <head>
   <title>Base Mini DApp</title>
+  <style>
+    body {
+      font-family: Arial;
+      text-align: center;
+      margin-top: 100px;
+      background: #0f172a;
+      color: white;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      background: #3b82f6;
+      border: none;
+      color: white;
+      border-radius: 8px;
+    }
+
+    .card {
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
-  <h2>Base Wallet Connector</h2>
+
+  <h2>🔵 Base Mini DApp</h2>
 
   <button onclick="connectWallet()">Connect Wallet</button>
 
-  <p id="address"></p>
-  <p id="balance"></p>
+  <div class="card">
+    <p id="address"></p>
+    <p id="balance"></p>
+  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/ethers/dist/ethers.min.js"></script>
 
   <script>
     async function connectWallet() {
       if (!window.ethereum) {
-        alert("Please install MetaMask");
+        alert("Install MetaMask");
         return;
       }
 
@@ -26,12 +52,13 @@
       const signer = provider.getSigner();
       const address = await signer.getAddress();
 
-      document.getElementById("address").innerText = "Address: " + address;
+      document.getElementById("address").innerText = "👛 " + address;
 
       const balance = await provider.getBalance(address);
       document.getElementById("balance").innerText =
-        "Balance: " + ethers.utils.formatEther(balance) + " ETH";
+        "💰 " + ethers.utils.formatEther(balance) + " ETH";
     }
   </script>
+
 </body>
 </html>
