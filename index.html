@@ -1,373 +1,115 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Base Mini DApp</title>
+
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      font-family: Arial;
       text-align: center;
-      background: linear-gradient(135deg, #0f172a 0%, #1a2847 100%);
+      margin-top: 60px;
+      background: #0f172a;
       color: white;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
     }
 
-    .container {
-      background: rgba(30, 41, 59, 0.8);
-      border-radius: 12px;
-      padding: 40px;
-      max-width: 500px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(59, 130, 246, 0.1);
-    }
-
-    h1 {
-      font-size: 28px;
-      margin-bottom: 30px;
-      font-weight: 600;
-    }
-
-    .button-group {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 30px;
-      flex-wrap: wrap;
-      justify-content: center;
+    button, input {
+      padding: 10px;
+      margin: 5px;
+      border-radius: 8px;
+      border: none;
     }
 
     button {
-      padding: 12px 24px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
       background: #3b82f6;
-      border: none;
       color: white;
-      border-radius: 8px;
-      transition: all 0.3s ease;
-      flex: 1;
-      min-width: 140px;
-    }
-
-    button:hover:not(:disabled) {
-      background: #2563eb;
-      transform: translateY(-2px);
-      box-shadow: 0 8px 16px rgba(59, 130, 246, 0.3);
-    }
-
-    button:disabled {
-      background: #64748b;
-      cursor: not-allowed;
-      opacity: 0.6;
-    }
-
-    button.secondary {
-      background: #ef4444;
-    }
-
-    button.secondary:hover:not(:disabled) {
-      background: #dc2626;
-      box-shadow: 0 8px 16px rgba(239, 68, 68, 0.3);
+      cursor: pointer;
     }
 
     .card {
       margin-top: 20px;
-      padding: 20px;
-      background: rgba(15, 23, 42, 0.5);
-      border-radius: 8px;
-      border: 1px solid rgba(59, 130, 246, 0.1);
     }
 
-    .status-item {
-      margin: 12px 0;
-      font-size: 14px;
-      min-height: 24px;
-    }
-
-    .status-item.success {
-      color: #10b981;
-    }
-
-    .status-item.error {
-      color: #ef4444;
-    }
-
-    .status-item.loading {
-      color: #f59e0b;
-    }
-
-    .spinner {
-      display: inline-block;
-      width: 16px;
-      height: 16px;
-      border: 2px solid rgba(59, 130, 246, 0.2);
-      border-top-color: #3b82f6;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    .address-truncated {
-      font-family: monospace;
-      word-break: break-all;
-    }
-
-    .info-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 8px 0;
-      border-bottom: 1px solid rgba(59, 130, 246, 0.1);
-    }
-
-    .info-row:last-child {
-      border-bottom: none;
-    }
-
-    .info-label {
-      color: #94a3b8;
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .info-value {
-      font-weight: 600;
-      font-size: 14px;
+    .tx-box {
+      margin-top: 30px;
     }
   </style>
 </head>
+
 <body>
-  <div class="container">
-    <h1>🔵 Base Mini DApp</h1>
 
-    <div class="button-group">
-      <button id="connectBtn">Connect Wallet</button>
-      <button id="disconnectBtn" class="secondary" disabled>Disconnect</button>
-    </div>
+  <h2>🔵 Base Mini DApp</h2>
 
-    <div class="card">
-      <div class="status-item" id="status"></div>
-      <div class="info-row" id="addressRow" style="display: none;">
-        <span class="info-label">Wallet Address</span>
-        <span class="info-value address-truncated" id="address"></span>
-      </div>
-      <div class="info-row" id="balanceRow" style="display: none;">
-        <span class="info-label">Balance</span>
-        <span class="info-value" id="balance"></span>
-      </div>
-      <div class="info-row" id="chainRow" style="display: none;">
-        <span class="info-label">Network</span>
-        <span class="info-value" id="chain"></span>
-      </div>
-    </div>
+  <button onclick="connectWallet()">Connect Wallet</button>
+  <button onclick="disconnectWallet()">Disconnect</button>
+
+  <div class="card">
+    <p id="status"></p>
+    <p id="address"></p>
+    <p id="balance"></p>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/ethers@6/dist/ethers.min.js"></script>
+  <div class="tx-box">
+    <h3>Send Transaction</h3>
+
+    <input type="text" id="receiver" placeholder="Receiver Address">
+    <br>
+
+    <input type="text" id="amount" placeholder="Amount in ETH">
+    <br>
+
+    <button onclick="sendTransaction()">Send</button>
+
+    <p id="txStatus"></p>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/ethers/dist/ethers.min.js"></script>
 
   <script>
-    // State management
-    let provider;
-    let currentAddress = null;
-    let isConnecting = false;
-
-    const connectBtn = document.getElementById('connectBtn');
-    const disconnectBtn = document.getElementById('disconnectBtn');
-    const statusEl = document.getElementById('status');
-    const addressEl = document.getElementById('address');
-    const balanceEl = document.getElementById('balance');
-    const chainEl = document.getElementById('chain');
-    const addressRow = document.getElementById('addressRow');
-    const balanceRow = document.getElementById('balanceRow');
-    const chainRow = document.getElementById('chainRow');
-
-    // Event listeners
-    connectBtn.addEventListener('click', connectWallet);
-    disconnectBtn.addEventListener('click', disconnectWallet);
-
-    // Listen for wallet events
-    if (window.ethereum) {
-      window.ethereum.on('accountsChanged', handleAccountsChanged);
-      window.ethereum.on('chainChanged', handleChainChanged);
-      window.ethereum.on('disconnect', handleDisconnect);
-    }
-
-    // Check for previously connected wallet on page load
-    window.addEventListener('load', () => {
-      checkWalletConnection();
-    });
-
-    async function checkWalletConnection() {
-      if (!window.ethereum) return;
-
-      try {
-        const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-        if (accounts.length > 0) {
-          currentAddress = accounts[0];
-          await initializeProvider();
-          updateUI();
-        }
-      } catch (error) {
-        console.error('Error checking wallet connection:', error);
-      }
-    }
-
     async function connectWallet() {
-      if (isConnecting) return;
-
       if (!window.ethereum) {
-        setStatus('❌ MetaMask not detected', 'error');
-        alert('Please install MetaMask to use this dApp');
+        alert("Install MetaMask");
         return;
       }
 
-      isConnecting = true;
-      connectBtn.disabled = true;
-      setStatus('⏳ Connecting...', 'loading');
+      document.getElementById("status").innerText = "⏳ Connecting...";
 
-      try {
-        // Request accounts
-        const accounts = await window.ethereum.request({
-          method: 'eth_requestAccounts'
-        });
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
 
-        currentAddress = accounts[0];
-        await initializeProvider();
-        updateUI();
-        setStatus('✅ Connected', 'success');
-      } catch (error) {
-        if (error.code === 4001) {
-          setStatus('⚠️ Connection rejected', 'error');
-        } else {
-          console.error('Connection error:', error);
-          setStatus('❌ Connection failed', 'error');
-        }
-      } finally {
-        isConnecting = false;
-        connectBtn.disabled = false;
-      }
-    }
+      await provider.send("eth_requestAccounts", []);
 
-    async function initializeProvider() {
-      provider = new ethers.BrowserProvider(window.ethereum);
-      await updateBalance();
-      await updateChain();
-    }
+      const signer = provider.getSigner();
+      const address = await signer.getAddress();
 
-    async function updateBalance() {
-      if (!provider || !currentAddress) return;
+      document.getElementById("address").innerText = "👛 " + address;
 
-      try {
-        const balance = await provider.getBalance(currentAddress);
-        const formattedBalance = ethers.formatEther(balance);
-        balanceEl.innerText = `${parseFloat(formattedBalance).toFixed(4)} ETH`;
-        balanceRow.style.display = 'flex';
-      } catch (error) {
-        console.error('Error fetching balance:', error);
-      }
-    }
+      const balance = await provider.getBalance(address);
 
-    async function updateChain() {
-      if (!provider) return;
+      document.getElementById("balance").innerText =
+        "💰 " + ethers.utils.formatEther(balance) + " ETH";
 
-      try {
-        const network = await provider.getNetwork();
-        const chainName = getChainName(network.chainId);
-        chainEl.innerText = chainName;
-        chainRow.style.display = 'flex';
-
-        // Warn if not on Base
-        if (network.chainId !== 8453n && network.chainId !== 84532n) {
-          setStatus('⚠️ Switch to Base network', 'error');
-        }
-      } catch (error) {
-        console.error('Error fetching chain:', error);
-      }
-    }
-
-    function getChainName(chainId) {
-      const chains = {
-        8453n: 'Base Mainnet',
-        84532n: 'Base Sepolia',
-        1n: 'Ethereum',
-        11155111n: 'Sepolia',
-        137n: 'Polygon',
-      };
-      return chains[chainId] || `Chain ${chainId}`;
-    }
-
-    function updateUI() {
-      if (currentAddress) {
-        addressEl.innerText = truncateAddress(currentAddress);
-        addressRow.style.display = 'flex';
-        connectBtn.disabled = true;
-        disconnectBtn.disabled = false;
-      } else {
-        clearUI();
-        connectBtn.disabled = false;
-        disconnectBtn.disabled = true;
-      }
-    }
-
-    function truncateAddress(address) {
-      return `${address.slice(0, 6)}...${address.slice(-4)}`;
+      document.getElementById("status").innerText = "✅ Connected";
     }
 
     function disconnectWallet() {
-      currentAddress = null;
-      provider = null;
-      clearUI();
-      setStatus('🔌 Disconnected', 'error');
+      document.getElementById("status").innerText = "🔌 Disconnected";
+      document.getElementById("address").innerText = "";
+      document.getElementById("balance").innerText = "";
     }
 
-    function clearUI() {
-      addressRow.style.display = 'none';
-      balanceRow.style.display = 'none';
-      chainRow.style.display = 'none';
-      addressEl.innerText = '';
-      balanceEl.innerText = '';
-      chainEl.innerText = '';
-    }
+    function sendTransaction() {
+      const receiver = document.getElementById("receiver").value;
+      const amount = document.getElementById("amount").value;
 
-    function setStatus(message, type = 'loading') {
-      statusEl.innerText = message;
-      statusEl.className = `status-item ${type}`;
-    }
-
-    function handleAccountsChanged(accounts) {
-      if (accounts.length === 0) {
-        disconnectWallet();
-      } else if (accounts[0] !== currentAddress) {
-        currentAddress = accounts[0];
-        updateUI();
-        if (provider) {
-          updateBalance();
-        }
+      if (!receiver || !amount) {
+        document.getElementById("txStatus").innerText =
+          "❌ Fill all transaction details";
+        return;
       }
-    }
 
-    function handleChainChanged() {
-      window.location.reload();
-    }
-
-    function handleDisconnect() {
-      disconnectWallet();
+      document.getElementById("txStatus").innerText =
+        "✅ Transaction prepared (simulation only)";
     }
   </script>
+
 </body>
 </html>
