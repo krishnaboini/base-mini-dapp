@@ -106,8 +106,14 @@
         return;
       }
 
+      if (!ethers.utils.isAddress(receiver)) {
+        document.getElementById("txStatus").innerText =
+          "❌ Invalid receiver address";
+        return;
+      }
+
       document.getElementById("txStatus").innerText =
-        "✅ Transaction prepared (simulation only)";
+        "✅ Transaction prepared successfully";
     }
   </script>
 
