@@ -20,7 +20,7 @@
     }
 
     button {
-      background: #3b82f6;
+      background: #0052ff;
       color: white;
       cursor: pointer;
     }
@@ -32,12 +32,18 @@
     .tx-box {
       margin-top: 30px;
     }
+
+    .network {
+      color: #60a5fa;
+      margin-bottom: 20px;
+    }
   </style>
 </head>
 
 <body>
 
-  <h2>🔵 Base Mini DApp</h2>
+  <h1>🔵 Base Mini DApp</h1>
+  <p class="network">Connected Network: Base Mainnet</p>
 
   <button onclick="connectWallet()">Connect Wallet</button>
   <button onclick="disconnectWallet()">Disconnect</button>
@@ -87,7 +93,7 @@
       document.getElementById("balance").innerText =
         "💰 " + ethers.utils.formatEther(balance) + " ETH";
 
-      document.getElementById("status").innerText = "✅ Connected";
+      document.getElementById("status").innerText = "✅ Connected to Base";
     }
 
     function disconnectWallet() {
