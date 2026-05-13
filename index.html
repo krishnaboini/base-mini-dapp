@@ -20,7 +20,7 @@
     }
 
     button {
-      background: #3b82f6;
+      background: #0052ff;
       color: white;
       cursor: pointer;
     }
@@ -32,12 +32,21 @@
     .tx-box {
       margin-top: 30px;
     }
+
+    .network {
+      color: #60a5fa;
+      margin-bottom: 20px;
+    }
   </style>
 </head>
 
 <body>
 
-  <h2>🔵 Base Mini DApp</h2>
+  <h1>🔵 Base Mini DApp</h1>
+
+  <p class="network" id="networkName">
+    Network: Not Connected
+  </p>
 
   <button onclick="connectWallet()">Connect Wallet</button>
   <button onclick="disconnectWallet()">Disconnect</button>
@@ -51,10 +60,10 @@
   <div class="tx-box">
     <h3>Send Transaction</h3>
 
-    <input type="text" id="receiver" placeholder="Receiver Address">
+    <input type="text" id="receiver" placeholder="0xReceiverWalletAddress">
     <br>
 
-    <input type="text" id="amount" placeholder="Amount in ETH">
+    <input type="text" id="amount" placeholder="0.01 ETH">
     <br>
 
     <button onclick="sendTransaction()">Send</button>
@@ -62,59 +71,93 @@
     <p id="txStatus"></p>
   </div>
 
+  <footer style="margin-top:40px; color:gray;">
+    Built for Base ecosystem learning
+  </footer>
+
   <script src="https://cdn.jsdelivr.net/npm/ethers/dist/ethers.min.js"></script>
 
   <script>
+
     async function connectWallet() {
+
       if (!window.ethereum) {
         alert("Install MetaMask");
         return;
       }
 
-      document.getElementById("status").innerText = "⏳ Connecting...";
+      document.getElementById("status").innerText =
+        "⏳ Connecting...";
 
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const provider =
+        new ethers.providers.Web3Provider(window.ethereum);
 
       await provider.send("eth_requestAccounts", []);
 
+      const network = await provider.getNetwork();
+
+      document.getElementById("networkName").innerText =
+        "🌐 Network: " + network.name;
+
       const signer = provider.getSigner();
+
       const address = await signer.getAddress();
 
-      document.getElementById("address").innerText = "👛 " + address;
+      document.getElementById("address").innerText =
+        "👛 " + address;
 
-      const balance = await provider.getBalance(address);
+      const balance =
+        await provider.getBalance(address);
 
       document.getElementById("balance").innerText =
-        "💰 " + ethers.utils.formatEther(balance) + " ETH";
+        "💰 " +
+        ethers.utils.formatEther(balance) +
+        " ETH";
 
-      document.getElementById("status").innerText = "✅ Connected";
+      document.getElementById("status").innerText =
+        "✅ Wallet Connected";
     }
 
     function disconnectWallet() {
-      document.getElementById("status").innerText = "🔌 Disconnected";
+
+      document.getElementById("status").innerText =
+        "🔌 Disconnected";
+
       document.getElementById("address").innerText = "";
       document.getElementById("balance").innerText = "";
+
+      document.getElementById("networkName").innerText =
+        "Network: Not Connected";
     }
 
     function sendTransaction() {
-      const receiver = document.getElementById("receiver").value;
-      const amount = document.getElementById("amount").value;
+
+      const receiver =
+        document.getElementById("receiver").value;
+
+      const amount =
+        document.getElementById("amount").value;
 
       if (!receiver || !amount) {
+
         document.getElementById("txStatus").innerText =
           "❌ Fill all transaction details";
+
         return;
       }
 
       if (!ethers.utils.isAddress(receiver)) {
+
         document.getElementById("txStatus").innerText =
           "❌ Invalid receiver address";
+
         return;
       }
 
       document.getElementById("txStatus").innerText =
         "✅ Transaction prepared successfully";
     }
+
   </script>
 
 </body>
