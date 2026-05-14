@@ -201,6 +201,7 @@
       };
 
       transactions.unshift(tx);
+      transactions = transactions.slice(0, 5);
 
       updateTransactionHistory();
 
