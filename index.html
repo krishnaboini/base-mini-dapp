@@ -101,9 +101,13 @@
 
     <h3>Recent Transactions</h3>
 
+    <button onclick="clearHistory()">
+      Clear History
+    </button>
+
     <ul id="txHistory">
-  <li>No transactions yet</li>
-</ul>
+      <li>No transactions yet</li>
+    </ul>
 
   </div>
 
@@ -203,6 +207,7 @@
       };
 
       transactions.unshift(tx);
+
       transactions = transactions.slice(0, 5);
 
       updateTransactionHistory();
@@ -218,6 +223,14 @@
 
       history.innerHTML = "";
 
+      if (transactions.length === 0) {
+
+        history.innerHTML =
+          "<li>No transactions yet</li>";
+
+        return;
+      }
+
       transactions.forEach(tx => {
 
         const item =
@@ -228,6 +241,16 @@
 
         history.appendChild(item);
       });
+    }
+
+    function clearHistory() {
+
+      transactions = [];
+
+      updateTransactionHistory();
+
+      document.getElementById("txStatus").innerText =
+        "🗑️ Transaction history cleared";
     }
 
   </script>
