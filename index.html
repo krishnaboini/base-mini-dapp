@@ -2,7 +2,6 @@
 <html>
 <head>
   <title>Base Mini DApp</title>
-
   <style>
     body {
       font-family: Arial;
@@ -17,6 +16,7 @@
       margin: 5px;
       border-radius: 8px;
       border: none;
+      min-width: 160px;
     }
 
     button {
@@ -66,6 +66,7 @@
 
   <button onclick="connectWallet()">Connect Wallet</button>
   <button onclick="disconnectWallet()">Disconnect</button>
+  <button onclick="copyWalletAddress()">Copy Address</button>
 
   <div class="card">
     <p id="status"></p>
@@ -174,6 +175,21 @@
 
       document.getElementById("networkName").innerText =
         "Network: Not Connected";
+    }
+
+    function copyWalletAddress() {
+
+      const walletText =
+        document.getElementById("address").innerText;
+
+      if (!walletText) {
+        alert("No wallet connected");
+        return;
+      }
+
+      navigator.clipboard.writeText(walletText);
+
+      alert("Wallet address copied");
     }
 
     function sendTransaction() {
