@@ -1,2 +1,7 @@
 # base-mini-dapp
-Simple Base wallet connect and balance viewer
+## Current Features
+- Wallet connection
+- Balance display
+- Base network detection
+- Transaction form UI
+- Transaction history tracking
